@@ -7,6 +7,7 @@ import { deleteCategorys, getCategory, getCategorys, PostCategorys, putCategory 
 import '../styles/components/modalDelete.css'
 import "./subcategory.css"
 import "./style.css"
+import { AiOutlineClose } from 'react-icons/ai';
 const {lang, language1}=require('../host/lang')
 
 
@@ -27,6 +28,11 @@ this.setState({data:res.data})
 console.log(res.data);
   })
   console.log(this.state.data);
+}
+
+
+closeAlert=()=>{
+  document.querySelector('.Alert').style="display: none"
 }
 
 
@@ -67,18 +73,30 @@ postCategory=(e)=>{
   PostCategorys(data).then(res=>{
     // alert('malumot tushdi')
       this.getCategory()
+      document.querySelector('.Alert').style="display: block"
   })
   this.toggle1()
 }
 
 putCategorys=(slug)=>{
-  var data={
+  if((document.querySelector('#file').value.length!=0)){
+    var data={
     "title_uz": document.querySelector('#edituzcategory').value,
     "title_ru": document.querySelector('#editrucategory').value,
     "title_en": document.querySelector('#editencategory').value,
     "image":this.state.file
 
   }
+  }else{
+    var data={
+      "title_uz": document.querySelector('#edituzcategory').value,
+      "title_ru": document.querySelector('#editrucategory').value,
+      "title_en": document.querySelector('#editencategory').value,
+      // "image":this.state.file
+  
+    }
+  }
+  
   putCategory(this.state.slug1, data).then(res=>{
     this.getCategory()
     console.log(data)
@@ -98,9 +116,9 @@ putCategorys=(slug)=>{
   edittoggle =(slug)=>{
     getCategory(slug).then(res=>{
       console.log(res.data);
-     document.querySelector('#edituzcategory').value=res.data.title;
-     document.querySelector('#editrucategory').value=res.data.title;
-     document.querySelector('#editencategory').value=res.data.title;
+     document.querySelector('#edituzcategory').value=res.data.title_uz;
+     document.querySelector('#editrucategory').value=res.data.title_ru;
+     document.querySelector('#editencategory').value=res.data.title_en;
     })
     this.setState({editmodal:true, slug1:slug})
   }
@@ -255,6 +273,13 @@ return <Col lg={6} md={12} sm={12} xs={12} className="mb-3">
             <button className='btn btn-warning' onClick={this.CloseModal1}>  {this.state.lang1=="uz"?("Bekor qilish"):(this.state.lang1=="ru"?("Отмена"):("Cancel"))} </button>
            </div>
          </div>
+        </div>
+        <div className="Alert">
+          <div className="d-flex p-2">
+            <p>Done</p>  
+          <div onClick={this.closeAlert} className="colesealert ml-5"><AiOutlineClose/></div>
+            </div>
+          
         </div>
     </Page>
     )

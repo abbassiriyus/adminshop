@@ -6,6 +6,7 @@ import Page from '../components/Page';
 import '../styles/components/modalDelete.css'
 import "./subcategory.css"
 import "./style.css"
+import { AiOutlineClose } from 'react-icons/ai';
 
 export default class Subcategory extends Component {
   state = {
@@ -52,23 +53,37 @@ this.CloseModal1()
 
 
 putSubcategorys=(slug)=>{
-  var data={
-    "title_uz": document.querySelector('#edituzsubcategory').value,
-    "title_ru": document.querySelector('#editrusubcategory').value,
-    "title_en": document.querySelector('#editensubcategory').value,
-    "category": document.querySelector('#editsubcategory').value,
-    "image": this.state.file
-
+  if((document.querySelector('#editfile').value).lenght!==0){
+    var data={
+      "title_uz": document.querySelector('#edituzsubcategory').value,
+      "title_ru": document.querySelector('#editrusubcategory').value,
+      "title_en": document.querySelector('#editensubcategory').value,
+      "category": document.querySelector('#editsubcategory').value,
+      "image": this.state.file
+  
+    }
+  }else{
+    var data={
+      "title_uz": document.querySelector('#edituzsubcategory').value,
+      "title_ru": document.querySelector('#editrusubcategory').value,
+      "title_en": document.querySelector('#editensubcategory').value,
+      "category": document.querySelector('#editsubcategory').value,
+      // "image": this.state.file  
+    }
   }
+  
   putSubcategory(this.state.slug1, data).then(res=>{
     this.getSubCategory()
+    document.querySelector('.Alert').style="display: block"
     this.edittoggle1()
   })
   
   .catch(err=>{
   })
 }
-
+closeAlert=()=>{
+  document.querySelector('.Alert').style="display: none"
+}
 
 postSubCategory=()=>{
   var data={
@@ -80,6 +95,7 @@ postSubCategory=()=>{
   }
   PostSubCategorys(data).then(res=>{
     this.getSubCategory()
+    document.querySelector('.Alert').style="display: block"
   })
   this.toggle1()
 }
@@ -98,9 +114,9 @@ postSubCategory=()=>{
   edittoggle =(slug)=>{
     getSubCategory(slug).then(res=>{
       console.log(res.data);
-    document.querySelector('#editensubcategory').value=res.data.title;
-    document.querySelector('#editrusubcategory').value=res.data.title;
-    document.querySelector('#edituzsubcategory').value=res.data.title;
+    document.querySelector('#editensubcategory').value=res.data.title_en;
+    document.querySelector('#editrusubcategory').value=res.data.title_ru;
+    document.querySelector('#edituzsubcategory').value=res.data.title_uz;
     document.querySelector('#editsubcategory').value=res.data.category_name;
     })
     this.setState({editmodal:true, slug1:slug})
@@ -207,7 +223,7 @@ return <Col lg={6} md={12} sm={12} xs={12} className="mb-3">
 
 
                 <Modal isOpen={this.state.editmodal}>
-                  <ModalHeader >{this.state.lang1=="uz"?("Kategoriyani tahrirlash"):(this.state.lang1=="ru"?(""):("Edit category "))}</ModalHeader>
+                  <ModalHeader >{this.state.lang1=="uz"?("Kategoriyani tahrirlash"):(this.state.lang1=="ru"?("Изменить категорию"):("Edit category "))}</ModalHeader>
                   <ModalBody>
                   <Form>
                   <FormGroup>
@@ -263,12 +279,18 @@ return <Col lg={6} md={12} sm={12} xs={12} className="mb-3">
 
                 <div className="ModalDelete1"> 
          <div className="ModalColumn">
-           <h2>{this.state.lang1=="uz"?(""):(this.state.lang1=="ru"?(""):("Delete this?"))}</h2>
+           <h2>{this.state.lang1=="uz"?("Rostdan ham o`chirmoqchimisiz"):(this.state.lang1=="ru"?("Удалить это"):("Delete this?"))}</h2>
            <div className="ButtonsModalDelete">
             <button className='btn btn-danger ml-3' onClick={() => this.deleteSubcaregory(this.state.delete1)}>{this.state.lang1=="uz"?("O`chirish"):(this.state.lang1=="ru"?("Удалить"):("Delete"))}</button>
             <button className='btn btn-warning' onClick={this.CloseModal1}> {this.state.lang1=="uz"?("Ortga"):(this.state.lang1=="ru"?("Отмена"):("Cancel"))} </button>
            </div>
          </div>
+        </div>
+        <div className="Alert">
+          <div className="d-flex p-2">
+            <p>Done</p>  
+          <div onClick={this.closeAlert} className="colesealert ml-5"><AiOutlineClose/></div>
+            </div>
         </div>
     </Page>  
     )

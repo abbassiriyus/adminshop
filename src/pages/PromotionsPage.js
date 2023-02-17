@@ -4,7 +4,9 @@ import { Button, Card, CardBody, CardHeader, Col, Modal, ModalBody, ModalFooter,
 // import Modal from 'react-bootstrap/Modal';
 import Page from '../components/Page';
 import { deletePromotions, getCategorys, getPromotion, getPromotions, getSubCategorys,  postPromotions, putPromotion } from '../host/config';
+import { AiOutlineClose } from 'react-icons/ai';
 import '../styles/components/modalDelete.css'
+import './style.css'
 const {lang, language1}=require('../host/lang')
 
 
@@ -51,13 +53,13 @@ edittoggle1=()=>{
 }
 edittoggle=(id)=>{
   getPromotion(id).then(res=>{
-      document.querySelector('#editnewTitleEn').value=res.data.title;
-      document.querySelector('#editnewTitleRu').value=res.data.title;
-      document.querySelector('#editnewTitleUz').value=res.data.title;
+      document.querySelector('#editnewTitleEn').value=res.data.title_en;
+      document.querySelector('#editnewTitleRu').value=res.data.title_ru;
+      document.querySelector('#editnewTitleUz').value=res.data.title_uz;
           document.querySelector('#editnewPromotion').value=res.data.percentage;
-      document.querySelector('#editnewDescriptionEn').value=res.data.description;
-      document.querySelector('#editnewDescriptionRu').value=res.data.description;
-      document.querySelector('#editnewDescriptionUz').value=res.data.description;
+      document.querySelector('#editnewDescriptionEn').value=res.data.description_en;
+      document.querySelector('#editnewDescriptionRu').value=res.data.description_ru;
+      document.querySelector('#editnewDescriptionUz').value=res.data.description_uz;
       // document.querySelector('#editnewPrice').value=res.data.price;
       document.querySelector('#editstartPromotion').value=res.data.date_from;
       document.querySelector('#editendPromotion').value=res.data.date_till;
@@ -65,6 +67,7 @@ edittoggle=(id)=>{
   this.setState({editmodal:true, id1:id})
 }
 postPromotion=()=>{
+ 
     var data1={
         "slug":document.querySelector('#newTitleEn').value,
         "title_en": document.querySelector('#newTitleEn').value,
@@ -78,15 +81,18 @@ postPromotion=()=>{
         "date_from":document.querySelector('#startPromotion').value,
         "date_till":document.querySelector('#endPromotion').value,
         "product":"string",
-        "image":this.state.file
+         "image":this.state.file
       }
+      
       postPromotions(data1).then(res =>{
         this.getPromotion()
+        document.querySelector('.Alert').style="display: block"
     })
     this.handleClose()
     }
 
     putPromotions=(id)=>{
+      if((document.querySelector('#file').value).length!==0){
       var data={
         "title_uz": document.querySelector('#editnewTitleUz').value,
         "title_ru": document.querySelector('#editnewTitleRu').value,
@@ -101,15 +107,39 @@ postPromotion=()=>{
         "product":"string",
         "image":this.state.file
 
+      }}else{
+        var data={
+          "title_uz": document.querySelector('#editnewTitleUz').value,
+          "title_ru": document.querySelector('#editnewTitleRu').value,
+          "title_en": document.querySelector('#editnewTitleEn').value,
+          "percentage":Number(document.querySelector('#editnewPromotion').value) ,
+          "description_en":document.querySelector('#editnewDescriptionEn').value,
+          "description_ru":document.querySelector('#editnewDescriptionRu').value,
+          "description_uz":document.querySelector('#editnewDescriptionUz').value,
+          // "price":document.querySelector('#editnewPrice').value,
+          "date_from":document.querySelector('#editstartPromotion').value,
+          "date_till":document.querySelector('#editendPromotion').value,
+          "product":"string",
+  
+        }
       }
       putPromotion(this.state.id1, data).then(res=>{
         this.getPromotion()
         this.edittoggle1()
+        document.querySelector('.Alert').style="display: block"
       })
       
       .catch(err=>{
       })
     }
+
+
+
+
+    closeAlert=()=>{
+      document.querySelector('.Alert').style="display: none"
+    }
+
 
     getPromotion = () =>{
       getPromotions().then(res=>{
@@ -224,15 +254,15 @@ componentDidMount(){
                   <ModalHeader > {this.state.lang1=="uz"?("Modal sarlavha"):(this.state.lang1=="ru"?("Модальное название"):("Modal title"))} </ModalHeader>
                   <ModalBody>
                   <div className='mb-2'>
-            <h3> {this.state.lang1=="uz"?("Aksiya nomini o'zgartirish(uz)"):(this.state.lang1=="ru"?("Имя для новой карты"):("Name promotions(uz)"))} </h3>
+            <h3> {this.state.lang1=="uz"?("Aksiya nomini o'zgartirish(uz)"):(this.state.lang1=="ru"?("Имя для новой карты(uz)"):("Name promotions(uz)"))} </h3>
             <input type="text" id="newTitleUz" placeholder="New card name(uz)" required/>
             </div>
                   <div className='mb-2'>
-            <h3> {this.state.lang1=="uz"?("Aksiya nomini o'zgartirish(en)"):(this.state.lang1=="ru"?("Имя для новой карты"):("Name promotions(en)"))} </h3>
+            <h3> {this.state.lang1=="uz"?("Aksiya nomini o'zgartirish(en)"):(this.state.lang1=="ru"?("Имя для новой карты(en)"):("Name promotions(en)"))} </h3>
             <input type="text" id="newTitleEn" placeholder="New card name(en)" required/>
             </div>
             <div className='mb-2'>
-            <h3> {this.state.lang1=="uz"?("Aksiya nomini o'zgartirish(ru)"):(this.state.lang1=="ru"?("Имя для новой карты"):("Name promotions(ru)"))} </h3>
+            <h3> {this.state.lang1=="uz"?("Aksiya nomini o'zgartirish(ru)"):(this.state.lang1=="ru"?("Имя для новой карты(ru)"):("Name promotions(ru)"))} </h3>
             <input type="text" id="newTitleRu" placeholder="New card name(ru)" required/>
             </div>
             <div className='mt-3'>
@@ -283,7 +313,7 @@ componentDidMount(){
             <input type="text" id="editnewTitleUz" placeholder="New card name(uz)" required/>
             </div>
                   <div className='mb-2'>
-            <h3> {this.state.lang1=="uz"?("Aksiya nomini o`zgartirish(uz)"):(this.state.lang1=="ru"?("Изменить название промоакции(en)"):("Edit promotion name(en)"))} </h3>
+            <h3> {this.state.lang1=="uz"?("Aksiya nomini o`zgartirish(en)"):(this.state.lang1=="ru"?("Изменить название промоакции(en)"):("Edit promotion name(en)"))} </h3>
             <input type="text" id="editnewTitleEn" placeholder="New card name(en)" required/>
             </div>
             <div className='mb-2'>
@@ -318,7 +348,7 @@ componentDidMount(){
             </div>
             <div className='mt-3'>
               <h3> {this.state.lang1=="uz"?("Ushbu aksiyaning rasmini o`zgartirish"):(this.state.lang1=="ru"?("Изменить изображение этой акции"):("Edit image of this promotion"))} </h3>
-              <input type="file" onInput={(e)=>this.handleFile(e)} id="file" requiered/>
+              <input type="file"  onInput={(e)=>this.handleFile(e)} id="file" requiered/>
             </div>
                   </ModalBody>
                   <ModalFooter>
@@ -330,6 +360,12 @@ componentDidMount(){
                     </Button>
                   </ModalFooter>
                 </Modal>
+                <div className="Alert">
+          <div className="d-flex p-2">
+            <p>Done</p>  
+          <div onClick={this.closeAlert} className="colesealert ml-5"><AiOutlineClose/></div>
+            </div>
+        </div>
     </Page>
     <div className="ModalDelete1"> 
          <div className="ModalColumn">

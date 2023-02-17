@@ -7,6 +7,7 @@ import { MdDelete } from 'react-icons/md';
 import Page from '../components/Page';
 import { addPromotions, deleteImages, deleteProducts, getCategorys, getImages, getImgSlug, getProduct, getProducts, getPromotions, getSubCategorys, PostImages, postProduct, putProduct } from '../host/config';
 import '../styles/components/productJs.scss'
+import { AiOutlineClose } from 'react-icons/ai';
 // import { lang } from '../host/host';
 
 import '../styles/components/modalDelete.css'
@@ -64,27 +65,28 @@ export default class Product extends Component {
       "description_ru": document.querySelector('#editnewDescription_ru').value,
       "description_en": document.querySelector('#editnewDescription_en').value,
       "price": document.querySelector('#editnewPrice').value,
-      "characteristics": document.querySelector('#editnewCharacteritics').value,
+      "characteristics_uz": document.querySelector('#editnewCharacteritics').value,
     }
     putProduct(this.state.slug1, data).then(res=>{
       this.getProduct1();
       this.edittoggle1()
+      document.querySelector('.Alert').style="display: block"
     })
   }
 
   edittoggle =(slug)=>{
     getProducts(slug).then(res=>{
       
-      document.querySelector('#editnewTitleEn').value=res.data.title;
-      document.querySelector('#editnewTitleRu').value=res.data.title;
-      document.querySelector('#editnewTitleUz').value=res.data.title;
+      document.querySelector('#editnewTitleEn').value=res.data.title_en;
+      document.querySelector('#editnewTitleRu').value=res.data.title_ru;
+      document.querySelector('#editnewTitleUz').value=res.data.title_uz;
       document.querySelector('#editcategory').value=res.data.category;
       document.querySelector('#editsubcategory').value=res.data.sub_category;
-      document.querySelector('#editnewDescription_uz').value=res.data.description;
-      document.querySelector('#editnewDescription_ru').value=res.data.description;
-      document.querySelector('#editnewDescription_en').value=res.data.description;
+      document.querySelector('#editnewDescription_uz').value=res.data.description_uz;
+      document.querySelector('#editnewDescription_ru').value=res.data.description_ru;
+      document.querySelector('#editnewDescription_en').value=res.data.description_en;
       document.querySelector('#editnewPrice').value=res.data.price;
-      document.querySelector('#editnewCharacteritics').value=res.data.characteristics;
+      document.querySelector('#editnewCharacteritics').value=res.data.characteristics_uz;
     })
     this.setState({editmodal:true, slug1:slug})
   }
@@ -162,6 +164,7 @@ export default class Product extends Component {
 
     postProduct(data1).then(res => {
       this.getProduct1()
+      document.querySelector('.Alert').style="display: block"
         
        PostImages(dataimg).then(res=>{
           this.getProduct1()
@@ -236,7 +239,9 @@ deleteProduct12=(slug)=>{
   toggle1 = () => {
     this.setState({ modal2: false })
   };
-
+closeAlert=()=>{
+  document.querySelector('.Alert').style="display: none"
+}
   componentDidMount() {
     this.getProduct1()
     this.getCategory()
@@ -303,7 +308,7 @@ deleteProduct12=(slug)=>{
             </Col>
           </Row>
           <Modal className="Modal12" isOpen={this.state.modal}>
-            <ModalHeader >  {this.state.lang1=="uz"?("Modal sarlavha"):(this.state.lang1=="ru"?("Модальное название"):("Modal title"))} </ModalHeader>
+            <ModalHeader >  {this.state.lang1=="uz"?("Tavar yaratish"):(this.state.lang1=="ru"?("Создание продукта"):("Product creation"))} </ModalHeader>
             <ModalBody  className="ModalBody"> 
               <div className="ModalBodyLeftHero">
               <div className='mb-2'>
@@ -315,7 +320,7 @@ deleteProduct12=(slug)=>{
                 <input type="text" id="newTitleEn" placeholder="New card name" required />
               </div>
               <div className='mb-2'>
-                <h5> {this.state.lang1=="uz"?("Yangi karta uchun nom (ru)"):(this.state.lang1=="ru"?("Имя для новой карты (ru)"):("Name for new card (en)"))} </h5>
+                <h5> {this.state.lang1=="uz"?("Yangi karta uchun nom (ru)"):(this.state.lang1=="ru"?("Имя для новой карты (ru)"):("Name for new card (ru)"))} </h5>
                 <input type="text" id="newTitleRu" placeholder="New card name" required />
               </div>
               <div className='mt-3'>
@@ -354,13 +359,7 @@ deleteProduct12=(slug)=>{
                 <h5> {this.state.lang1=="uz"?("Yangi kartaning xususiyatlari"):(this.state.lang1=="ru"?("Характеристики новой карты"):("Characteristics of new card"))} </h5>
                 <input type="text" id="newCharacteritics" placeholder="New card characeristics" />
               </div>
-              <div className='mt-3'>
-                <h5> {this.state.lang1=="uz"?("Yangi karta tasviri"):(this.state.lang1=="ru"?("Изображение новой карты"):("Image of new card"))}  </h5>
-                <input type="file" onInput={(e) => this.handleFile(e)} id="file" requiered />
-              </div>
                 </div>
-              
-             
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={this.postProduct1}>
@@ -445,29 +444,29 @@ deleteProduct12=(slug)=>{
 
 
           <Modal isOpen={this.state.modal1}>
-            <ModalHeader >Aksiya qo`shish</ModalHeader>
+            <ModalHeader >{this.state.lang1=="uz"?("Aksiya qo`shish"):(this.state.lang1=="ru"?("Добавить действие"):("create promotion"))}</ModalHeader>
             <ModalBody>
               <div className='mt-3'>
-                <h3>aksiya</h3>
+                <h3>{this.state.lang1=="uz"?("Aksiya"):(this.state.lang1=="ru"?("действие"):("promotion"))}</h3>
                 <Input type="select" id="addpromotion1" name="select">
                   {this.state.dataPromotion.map(item1 => { return <option value={item1.id}>{item1.title}</option> })}
                 </Input>
               </div>
 
               <div className='mt-3'>
-                <h3>add or remove</h3>
+                <h3>{this.state.lang1=="uz"?("qo`shish yoki olib tashlash"):(this.state.lang1=="ru"?("добавить или удалить"):("add or remove"))}</h3>
                 <Input type="select" id="addpromotion" name="select">
-                  <option value="add">add</option>
-                  <option value="remove">remove</option>
+                  <option value="add">{this.state.lang1=="uz"?("qo`shish"):(this.state.lang1=="ru"?("добавить"):("add"))}</option>
+                  <option value="remove">{this.state.lang1=="uz"?("olib tashlash"):(this.state.lang1=="ru"?("удалить"):("remove"))}</option>
                 </Input>
               </div>
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={this.addPromotion}>
-                save
+              {this.state.lang1=="uz"?("saqlash"):(this.state.lang1=="ru"?("хранить"):("save"))}
               </Button>
-              <Button color="secondary" onClick={this.handleClose1}>
-                Cancel
+              <Button color="secondary" onCli11000ck={this.handleClose1}>
+              {this.state.lang1=="uz"?("Bekor qilish"):(this.state.lang1=="ru"?("Отмена"):("Cancel"))}
               </Button>
             </ModalFooter>
           </Modal>
@@ -478,7 +477,7 @@ deleteProduct12=(slug)=>{
             <ModalBody>
               <Form>
                 <FormGroup>
-                  <Label for="exampleImage">new image</Label>
+                  <Label for="exampleImage">{this.state.lang1=="uz"?("Rasm qoshish"):(this.state.lang1=="ru"?("Добавить изображение"):("add to images"))}</Label>
                   <Input onInput={(e) => this.handleFile(e)} id="file" type="file" >
                   </Input>
                 </FormGroup>
@@ -494,13 +493,19 @@ deleteProduct12=(slug)=>{
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={this.postImage}>
-                save
+              {this.state.lang1=="uz"?("saqlash"):(this.state.lang1=="ru"?("хранить"):("save"))}
               </Button>
               <Button color="secondary" onClick={this.toggle1}>
-                Cancel
+              {this.state.lang1=="uz"?("Bekor qilish"):(this.state.lang1=="ru"?("Отмена"):("Cancel"))}
               </Button>
             </ModalFooter>
           </Modal>
+          <div className="Alert">
+          <div className="d-flex p-2">
+            <p>Done</p>  
+          <div onClick={this.closeAlert} className="colesealert ml-5"><AiOutlineClose/></div>
+            </div>
+        </div>
         </Page>
 
 
@@ -512,7 +517,9 @@ deleteProduct12=(slug)=>{
             <button className='btn btn-warning' onClick={this.CloseModal1}>{this.state.lang1=="uz"?("Bekor qilish"):(this.state.lang1=="ru"?("Отмена"):("Cancel"))}</button>
            </div>
          </div>
+         
         </div>
+        
       </>
     )
   }

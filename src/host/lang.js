@@ -1,5 +1,5 @@
 export var language1={
-    "uz":{
+            "uz":{
         "item":"buyum"
     },
     "ru":{

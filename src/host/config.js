@@ -1,6 +1,7 @@
 import { host,access_token,httpRequest } from "./host"
 import { lang } from "./host"
 // post login
+
 export const postContact= (data) => {
     const config = {
         url: `${host}/auth/v1/login/`,
@@ -48,11 +49,11 @@ export const postContact= (data) => {
           return httpRequest(config);
         };
 
-    export const PostCategorys= (formDataObj) => {
+    export const PostCategorys= (data) => {
       let config = {
           url: `${host}/api/v1/categories/create/`,
           method: "post",
-          data: formDataObj,
+          data: data,
           headers: {
             'Authorization': `Token ${access_token}`,
             "Content-Type": "multipart/form-data"

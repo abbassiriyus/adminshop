@@ -11,6 +11,7 @@ import {
   MdInsertChart,
   MdKeyboardArrowDown,
   MdViewList,
+  MdExitToApp
 } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import {
@@ -42,9 +43,9 @@ const navComponents = [
     exact: false, 
     Icon: MdGroupWork,
   },
-  { to: '/subcategory', name:`${(localStorage.getItem("lang"))=="uz"?("Pastki kategoriya"):((localStorage.getItem("lang"))=="en"?("Subcategory"):("Подкатегория"))}`, exact: false, Icon: MdInsertChart },
+  { to: '/subcategory', name:`${(localStorage.getItem("lang"))=="uz"?("Subkategoriya"):((localStorage.getItem("lang"))=="en"?("Subcategory"):("Подкатегория"))}`, exact: false, Icon: MdInsertChart },
   // { to: '/productimg', name: 'Product Images', exact: false, Icon: MdChromeReaderMode },
-  { to: '/promotions', name: `${(localStorage.getItem("lang"))=="uz"?("Aqsiya"):((localStorage.getItem("lang"))=="en"?("Aksiya"):("Аксия"))}`, exact: false, Icon: MdViewList },
+  { to: '/promotions', name: `${(localStorage.getItem("lang"))=="uz"?("Aksiya"):((localStorage.getItem("lang"))=="en"?("Aksiya"):("Аксия"))}`, exact: false, Icon: MdViewList },
   // {
   //   to: '/dropdowns',
   //   name: 'dropdowns',
@@ -59,7 +60,7 @@ const navComponents = [
 
 
 const navItems = [
-  { to: '/', name:`${(localStorage.getItem("lang"))=="uz"?("Bosh sahifa"):((localStorage.getItem("lang"))=="en"?("Dashboard"):("Домашняя страница"))}` , exact: true, Icon: MdDashboard },
+  { to: '/', name:`${(localStorage.getItem("lang"))=="uz"?("Bosh sahifa"):((localStorage.getItem("lang"))=="en"?("Dashboard"):("Домашня страница"))}` , exact: true, Icon: MdDashboard },
   // { to: '/cards', name: 'cards', exact: false, Icon: MdWeb },
 
   // { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },  
@@ -83,6 +84,12 @@ class Sidebar extends React.Component {
       };
     });
   };
+
+
+   exit=()=>{
+     localStorage.clear();
+     window.location.reload()
+  }
 
 
   render() {
@@ -152,6 +159,16 @@ class Sidebar extends React.Component {
                   </BSNavLink>
                 </NavItem>
               ))}
+                 <NavItem  className={bem.e('nav-item')}>
+                   <BSNavLink
+                        className="text-uppercase"
+                        activeClassName="active"
+                   >
+                  
+                        <span className="" onClick={()=> this.exit()}> <MdExitToApp/>  {(localStorage.getItem("lang"))=="uz"?("Chiqish"):((localStorage.getItem("lang"))=="en"?("Log out"):("Выйти"))}</span>
+                   </BSNavLink>
+                    {/* <Icon className={bem.e('nav-item-icon')} /> */}
+                </NavItem>
             </Collapse>
 
             {/* <NavItem

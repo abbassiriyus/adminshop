@@ -13,6 +13,48 @@
     padding: 15%;
 }
 
+
+
+.Alert{
+    position: fixed;
+    right: 1%;
+    bottom: 2%;
+    /*width: 20vw;*/
+    padding: 7px 0;
+    border-radius: 10px;
+    text-align: center;
+    background-color: rgba(53, 151, 64, 0.77);
+    transition: all 0.3s ease-in-out;
+    z-index: 200;
+    /* display: flex; */
+    display: none;
+    width: 150px;
+}
+.Alert:hover{
+    background-color: rgb(53, 151, 64);
+}
+
+
+.Alert p {
+    margin: 0;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1vw;
+    /* display: inline-block; */
+}
+
+
+.closealert{
+    position: fixed;
+    right: 1.4%;
+    bottom: 3%;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
 .modal-dialog{
     max-width: 50vw !important;
 }

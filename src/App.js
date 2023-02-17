@@ -28,16 +28,20 @@
               postContact(data).then(res=>{
                 this.setState({token:res.data.key})
                   localStorage.setItem('token',res.data.key)
+                  window.location.reload()
                 }).catch(err=>{
               alert('noto`g`ri parol')
                 })
-          
+              // window.location.reload()
               }
               componentDidMount(){
-                // this.setState(token:localStorage.getItem('token'))
+                this.setState({token:localStorage.getItem('token')})
                 // setTimeout(() => {
                 //    localStorage.clear('token')
                 // }, 100); 
+                // console.log(this.state.token);
+              // console.log(  window.location.protocol==="https:"?("https://shop.abrorjonaxmadov.uz"):("http://shop.abrorjonaxmadov.uz"));
+
               }
             render() {
           
@@ -68,6 +72,7 @@
                     size="lg"
                     className="bg-gradient-theme-left border-0"
                     block
+                    // type="submit"
                     onClick={()=>this.pushLogin()}>
                     Login
                   </Button>

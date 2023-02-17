@@ -5,6 +5,7 @@ import { Card, Col, Row } from 'reactstrap';
 import { getCategorys, getCompany, getContacts,getDollor,getProduct, getPromotions, getSubCategorys, postCopany, postDollors, putCompany, putDollor } from '../host/config';
 import axios from 'axios';
 import "./subcategory.css"
+import {AiOutlineClose} from 'react-icons/ai'
 const {lang, language1}=require('../host/lang')
 
 class DashboardPage extends React.Component {
@@ -23,10 +24,12 @@ class DashboardPage extends React.Component {
 
   handleFile(e) {
     let file1 = e.target.files[0];
+    console.log(e.target.files[0]);
   this.setState({file:file1})
   }
   handleFile2(e) {
     let file2 = e.target.files[0];
+    console.log(e.target.files[0]);
   this.setState({file2:file2})
   }
  getcategory=()=>{
@@ -71,6 +74,9 @@ document.querySelector('#team_story').value=res.data.team_story
 document.querySelector('#longitude').value=res.data.longitude
 document.querySelector('#latitude').value=res.data.latitude
 this.state.file2=res.data.logo
+document.querySelector('#telegram').value=res.data.telegram
+document.querySelector('#instagram').value=res.data.instagram
+document.querySelector('#facebook').value=res.data.facebook
 })
 }
 postCompanys=()=>{
@@ -85,20 +91,83 @@ postCompanys=()=>{
   "longitude": "123324.2342342000000000000000000",
   "latitude": "12432432.2343530000000000000000000",
   "created": 1,
-  "modified": 1
+  "modified": 1,
+  "telegram": document.querySelector('#telegram').value,
+  "instagram": document.querySelector('#instagram').value,
+  "facebook": document.querySelector('#facebook').value
 }
+document.querySelector('.Alert').style="display: block"
 postCopany(data).then(res=>{    
   this.getCompanys();
 })
 }
+
+
+
 putCompanys=()=>{
-  var put ={
-  "logo": this.state.file2,
-  "phone": document.querySelector('#phone').value,
-  "about_img": this.state.file,
-  "team": document.querySelector('#team').value,
-  "team_story": document.querySelector('#team_story').value,
+  var put
+  if((document.querySelector('#aboutImg').value).length!=0 && (document.querySelector('#logo').value).length!=0){
+   put ={
+      "logo": this.state.file2,
+      "phone": document.querySelector('#phone').value,
+      "about_img": this.state.file,
+      "team": document.querySelector('#team').value,
+      "longitude": document.querySelector('#longitude').value,
+      "latitude": document.querySelector('#latitude').value,
+      "team_story": document.querySelector('#team_story').value,
+      "telegram": document.querySelector('#telegram').value,
+      "instagram": document.querySelector('#instagram').value,
+      "facebook": document.querySelector('#facebook').value
+      }
+      // console.log("bir");
+  }else if((document.querySelector('#logo').value).length===0 && (document.querySelector('#aboutImg').value).length!=0) {
+     put ={
+      // "logo": this.state.file2,
+      "phone": document.querySelector('#phone').value,
+      "longitude": document.querySelector('#longitude').value,
+      "latitude": document.querySelector('#latitude').value,
+      "about_img": this.state.file,
+      "team": document.querySelector('#team').value,
+      "team_story": document.querySelector('#team_story').value,
+      "telegram": document.querySelector('#telegram').value,
+      "instagram": document.querySelector('#instagram').value,
+      "facebook": document.querySelector('#facebook').value
+      }
+    
+    // console.log("ikki");
   }
+      else if((document.querySelector('#aboutImg').value).length===0 && (document.querySelector('#logo').value).length!=0) {
+        put ={
+          "longitude": document.querySelector('#longitude').value,
+          "latitude": document.querySelector('#latitude').value,
+          "logo": this.state.file2,
+          "phone": document.querySelector('#phone').value,
+          // "about_img": this.state.file,
+          "team": document.querySelector('#team').value,
+          "team_story": document.querySelector('#team_story').value,
+          "telegram": document.querySelector('#telegram').value,
+          "instagram": document.querySelector('#instagram').value,
+          "facebook": document.querySelector('#facebook').value
+          }
+        // console.log("uch");
+        }else{
+             put ={
+              "longitude": document.querySelector('#longitude').value,
+              "latitude": document.querySelector('#latitude').value,
+
+              // "logo": this.state.file2,
+              "phone": document.querySelector('#phone').value,
+              // "about_img": this.state.file,
+              "team": document.querySelector('#team').value,
+              "team_story": document.querySelector('#team_story').value,
+              "telegram": document.querySelector('#telegram').value,
+              "instagram": document.querySelector('#instagram').value,
+              "facebook": document.querySelector('#facebook').value
+              }
+              // console.log("to`rt");
+          }
+  
+  
     putCompany(put).then(res=>{
     document.querySelector('#phone').value=res.data.phone
     document.querySelector('#team').value=res.data.team
@@ -106,19 +175,30 @@ putCompanys=()=>{
     document.querySelector('#longitude').value=res.data.longitude
     document.querySelector('#latitude').value=res.data.latitude
     this.state.file2=res.data.logo
+    document.querySelector('#telegram').value=res.data.telegram
+    document.querySelector('#instagram').value=res.data.instagram
+    document.querySelector('#facebook').value=res.data.facebook
+    document.querySelector('.Alert').style="display:block";
+    // alert('yuborildi')
   })
+  // window.location.reload()
+
 }
 Dollor=()=>{
   var data={
     "value":document.querySelector('#dataDollor').value
   }
   putDollor(data).then(res=>{
+    document.querySelector('.Alert').style= "display:block"
   })
 }
 getDollors=()=>{
   getDollor().then(res=>{
     document.querySelector('#dataDollor').value=res.data.value
   })
+}
+closeAlert=()=>{
+  document.querySelector('.Alert').style="display: none"
 }
 componentDidMount(){
   this.getImaga()
@@ -171,7 +251,7 @@ componentDidMount(){
                 
               <div className='mt-3'>
                 <h5>{this.state.lang1=="uz"?("Telefon raqam"):(this.state.lang1=="ru"?("Номер телефона"):("Phone Number"))}</h5>
-                <input type="number" id="phone" placeholder={this.state.lang1=="uz"?(""):(this.state.lang1=="ru"?(""):(""))} />
+                <input type="text" id="phone" placeholder={this.state.lang1=="uz"?(""):(this.state.lang1=="ru"?(""):(""))} />
               </div>
               
               <div className='mt-3'>
@@ -198,6 +278,20 @@ componentDidMount(){
                 <h5>{this.state.lang1=="uz"?("Biz haqimizda rasm"):(this.state.lang1=="ru"?("картина о нас"):("Picture about us"))}</h5>
                 <input type="file" onInput={(e) => this.handleFile(e)} id="aboutImg" requiered />
               </div>
+              <div className='mt-3'>
+                <h5>{this.state.lang1=="uz"?("Telegram"):(this.state.lang1=="ru"?("Telegram"):("Telegram"))}</h5>
+                <input type="text" id="telegram" requiered />
+              </div>
+              <div className='mt-3'>
+                <h5>{this.state.lang1=="uz"?("Instagram"):(this.state.lang1=="ru"?("Instagram"):("Instagram"))}</h5>
+                <input type="text" id="instagram" requiered />
+              </div>
+              <div className='mt-3'>
+                <h5>{this.state.lang1=="uz"?("Facebook"):(this.state.lang1=="ru"?("Facebook"):("Facebook"))}</h5>
+                <input type="text" id="facebook" requiered />
+              </div>
+
+
 
               </div>
               <button className='btn btn-primary mt-2 btn-send' onClick={()=> this.putCompanys()}>{this.state.lang1=="uz"?("Yuborish"):(this.state.lang1=="ru"?("Отправка"):("Sending"))}</button>
@@ -205,6 +299,13 @@ componentDidMount(){
               <div className="dollor12 mt-3">
                 <h5>Dollar kursi</h5>
        <input className='input-dollar' type="number" id='dataDollor'/><button onClick={()=>{this.Dollor()}} className="btn btn-primary">{this.state.lang1=="uz"?("Qiymatni yuborish"):(this.state.lang1=="ru"?("Отправить значение"):("Send value"))}</button></div>
+        <div className="Alert">
+          <div className="d-flex p-2">
+            <p>Done</p>  
+          <div onClick={this.closeAlert} className="colesealert ml-5"><AiOutlineClose/></div>
+            </div>
+          
+        </div>
       </Page>
     );
   }
